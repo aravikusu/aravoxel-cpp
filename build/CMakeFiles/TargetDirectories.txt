@@ -1,0 +1,5 @@
+/mnt/ultracockdrive/repos/aravoxel-cpp/build/CMakeFiles/aravoxel.dir
+/mnt/ultracockdrive/repos/aravoxel-cpp/build/CMakeFiles/package.dir
+/mnt/ultracockdrive/repos/aravoxel-cpp/build/CMakeFiles/package_source.dir
+/mnt/ultracockdrive/repos/aravoxel-cpp/build/CMakeFiles/edit_cache.dir
+/mnt/ultracockdrive/repos/aravoxel-cpp/build/CMakeFiles/rebuild_cache.dir
