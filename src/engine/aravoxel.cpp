@@ -2,42 +2,31 @@
 
 bool Aravoxel::init()
 {
-    // Initialize SDL, create an OpenGL window...
-    if (SDL_Init(SDL_INIT_VIDEO) < 0)
+    glfwInit();
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+    window = glfwCreateWindow(1920, 1080, "aravoxel", NULL, NULL);
+
+    if (window == NULL)
     {
-        std::cout << engine::console::error() << "Aravoxel::init: SDL_Init failure:" << SDL_GetError() << "\n";
+        std::cout << engine::console::error() << "Aravoxel::init: Failed to create GLFW window!" << "\n";
         return false;
     }
 
-    window = SDL_CreateWindow(
-        "Aravoxel",
-        SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-        1920, 1080,
-        SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
+    glfwMakeContextCurrent(window);
 
-    if (window == nullptr)
-    {
-        std::cout << engine::console::error() << "Aravoxel::init: SDL_CreateWindow failure:" << SDL_GetError() << "\n";
-        return false;
-    }
+    // A lambda function in order to get around GLFW not accepting class functions due to being written in C.
+    // C limitations...
+    auto frameBufferCallback = [](GLFWwindow* window, int width, int height) {
+        glViewport(0, 0, width, height);
+    };
 
-    // Set OpenGL attributes.
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
-    SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-
-    // Need that OpenGL context...
-    glContext = SDL_GL_CreateContext(window);
-
-    if (glContext == nullptr)
-    {
-        std::cout << engine::console::error() << "Aravoxel::init: SDL_GL_CreateContext failure:" << SDL_GetError() << "\n";
-    }
+    glfwSetFramebufferSizeCallback(window, frameBufferCallback);
 
     // Initalize GLAD
-    if (!gladLoadGLLoader(SDL_GL_GetProcAddress))
+    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
     {
         std::cout << engine::console::error() << "Aravoxel::init: GLAD could not be initialized!\n";
         return false;
@@ -54,8 +43,7 @@ bool Aravoxel::init()
 
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     
-    fpsTimer.start();
-    drawTest();
+    //fpsTimer.start();
     return true;
 }
 
@@ -80,14 +68,15 @@ void Aravoxel::drawTest()
 
 void Aravoxel::loop()
 {
-    while (running)
+    while (!glfwWindowShouldClose(window))
     {
-        render();
         input();
+        render();
 
         update();
 
-        SDL_GL_SwapWindow(window);
+        glfwPollEvents();
+        glfwSwapBuffers(window);
         ++countedFrames;
     }
 }
@@ -111,29 +100,16 @@ void Aravoxel::render()
 
 void Aravoxel::update()
 {
-    float averageFPS = countedFrames / (fpsTimer.getTicks() / 1000.f);
+    float averageFPS = countedFrames / glfwGetTime();
     std::string title = "aravoxel (" + std::to_string((int)averageFPS) + "FPS)";
-    SDL_SetWindowTitle(window, title.c_str());
+    glfwSetWindowTitle(window, title.c_str());
 }
 
 void Aravoxel::input()
 {
-    SDL_Event e;
-
-    while (SDL_PollEvent(&e) != 0)
+    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
     {
-        if (e.type == SDL_QUIT)
-            running = false;
-
-        switch (e.type)
-        {
-        case SDL_KEYDOWN:
-            switch (e.key.keysym.sym)
-            {
-            case SDLK_ESCAPE:
-                running = false;
-            }
-        }
+        glfwSetWindowShouldClose(window, true);
     }
 }
 
@@ -146,8 +122,7 @@ Aravoxel::Aravoxel()
     else
     {
         std::cout << engine::console::aravoxel() << "is ready for take-off.\n";
-        running = true;
-
+        drawTest();
         loop();
     }
 }
@@ -156,6 +131,5 @@ Aravoxel::~Aravoxel()
 {
     std::cout << engine::console::aravoxel() << "is terminating.\n";
     resourceManager.clear();
-    SDL_DestroyWindow(window);
-    SDL_Quit();
+    glfwTerminate();
 }

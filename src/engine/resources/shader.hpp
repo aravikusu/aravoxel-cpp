@@ -6,7 +6,7 @@
 #include "../engine.hpp"
 
 /// @brief Stores an OpenGL Shader.
-/// Has functions for compiling a shader program and setting uniforms.
+/// Has functions for compiling and using a shader program, as well as setting uniforms.
 class Shader
 {
 public:

@@ -1,11 +1,10 @@
 #pragma once
 
 #include <iostream>
-#include <SDL2/SDL.h>
 #include <glad/glad.h>
+#include <GLFW/glfw3.h>
 #include <math.h>
 #include <vector>
-#include "../util/timer.hpp"
 #include "./resourceManager.hpp"
 #include "./vertexArrayObject.hpp"
 #include "./engine.hpp"
@@ -25,13 +24,11 @@ public:
     void drawTest();
 private:
     bool running;
-    Timer fpsTimer;
-    int countedFrames;
+    int countedFrames = 0;
 
     ResourceManager resourceManager;
     VertexArrayObject VAO;
 
 
-    SDL_Window* window;
-    SDL_GLContext glContext;
+    GLFWwindow* window;
 };

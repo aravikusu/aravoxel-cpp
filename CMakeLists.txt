@@ -16,4 +16,4 @@ add_executable(aravoxel ${aravoxel_SOURCES} src/glad.c)
 
 target_include_directories(aravoxel PRIVATE ${aravoxel_INCLUDE_DIRS})
 
-target_link_libraries(aravoxel SDL2main SDL2 GL)
+target_link_libraries(aravoxel glfw3 GL X11 pthread Xrandr Xi dl)

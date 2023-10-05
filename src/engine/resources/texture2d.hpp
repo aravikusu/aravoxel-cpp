@@ -3,6 +3,8 @@
 #include <glad/glad.h>
 #include <iostream>
 
+/// @brief Stores a 2D texture.
+/// Has functions for creating as well as using a texture.
 class Texture2D
 {
 public:
