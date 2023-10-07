@@ -1,6 +1,6 @@
-#include "vertexArrayObject.hpp"
+#include "baseMesh.hpp"
 
-void VertexArrayObject::createVAO(std::vector<GLfloat> vertices, std::vector<GLuint> indices)
+void BaseMesh::createVAO(std::vector<GLfloat> vertices, std::vector<GLuint> indices)
 {
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
@@ -22,16 +22,4 @@ void VertexArrayObject::createVAO(std::vector<GLfloat> vertices, std::vector<GLu
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLfloat), indices.data(), GL_STATIC_DRAW);
     }
-
-    // position
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *)0);
-    glEnableVertexAttribArray(0);
-
-    // color
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *)(3 * sizeof(float)));
-    glEnableVertexAttribArray(1);
-
-    // texture coords
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *)(6 * sizeof(float)));
-    glEnableVertexAttribArray(2);
 }

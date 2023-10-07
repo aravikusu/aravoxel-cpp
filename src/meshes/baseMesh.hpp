@@ -3,11 +3,10 @@
 #include <glad/glad.h>
 #include <vector>
 
-class VertexArrayObject
+class BaseMesh
 {
 public:
     GLuint VAO;
-    
     void createVAO(std::vector<GLfloat> vertices, std::vector<GLuint> indices);
 
 private:
