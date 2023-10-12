@@ -12,6 +12,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <../entities/debugCamera.hpp>
+#include "../scenes/testScene.hpp"
 
 class Aravoxel
 {
@@ -20,12 +21,13 @@ public:
     ~Aravoxel();
 
     bool init();
+    void keyInput();
     void loop();
     void update();
     void render();
     void renderDebug();
 
-    void drawTest();
+    void changeGameState(engine::enums::GameState state);
 
     // CALLBACKS BELOW \\
     // Has to be this way.
@@ -43,21 +45,9 @@ private:
     float lastX = engine::SCREEN_WIDTH / 2.0f;
     float lastY = engine::SCREEN_WIDTH / 2.0f;
 
-    DebugCamera camera;
+    engine::enums::GameState gameState = engine::enums::GameState::INIT;
 
-    ResourceManager resourceManager;
-    CubeMesh mesh;
-    std::vector<glm::vec3> cubePositions = {
-        glm::vec3(0.0f, 0.0f, 0.0f),
-        glm::vec3(2.0f, 5.0f, -15.0f),
-        glm::vec3(-1.5f, -2.2f, -2.5f),
-        glm::vec3(-3.8f, -2.0f, -12.3f),
-        glm::vec3(2.4f, -0.4f, -3.5f),
-        glm::vec3(-1.7f, 3.0f, -7.5f),
-        glm::vec3(1.3f, -2.0f, -2.5f),
-        glm::vec3(1.5f, 2.0f, -2.5f),
-        glm::vec3(1.5f, 0.2f, -1.5f),
-        glm::vec3(-1.3f, 1.0f, -1.5f)};
+    TestScene test;
 
     GLFWwindow *window;
 

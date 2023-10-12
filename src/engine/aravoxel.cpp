@@ -20,7 +20,7 @@ bool Aravoxel::init()
     glfwSetWindowUserPointer(window, this);
 
     glfwMakeContextCurrent(window);
-    //glfwSwapInterval(0);
+    // glfwSwapInterval(0);
     glfwSetFramebufferSizeCallback(window, frameBufferSizeCallback);
     glfwSetKeyCallback(window, keyCallback);
     glfwSetCursorPosCallback(window, mouseCallback);
@@ -42,18 +42,6 @@ bool Aravoxel::init()
     return true;
 }
 
-void Aravoxel::drawTest()
-{
-    Shader shader = resourceManager.loadShader("test.vs", "test.fs", "test");
-    resourceManager.loadTexture("container.jpg", false, "container");
-    resourceManager.loadTexture("awesomeface.png", true, "awesomeface", true);
-    shader.use();
-    shader.setInteger("texture1", 0);
-    shader.setInteger("texture2", 1);
-
-    mesh.create();
-}
-
 void Aravoxel::loop()
 {
     while (!glfwWindowShouldClose(window))
@@ -62,7 +50,7 @@ void Aravoxel::loop()
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
 
-        camera.keyboardInput(window, deltaTime);
+        keyInput();
         render();
         update();
 
@@ -73,40 +61,26 @@ void Aravoxel::loop()
     }
 }
 
+void Aravoxel::keyInput()
+{
+    switch (gameState)
+    {
+    case engine::enums::GameState::TEST:
+        test.keyInput(window, deltaTime);
+    }
+}
+
 void Aravoxel::render()
 {
     glClearColor(0.1f, 0.16f, 0.25f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    Shader shader = resourceManager.getShader("test");
-    Texture2D container = resourceManager.getTexture("container");
-    Texture2D awesomeface = resourceManager.getTexture("awesomeface");
-
-    container.bind();
-    awesomeface.bind(GL_TEXTURE1);
-
-    // Set up model, view, and projection matrix
-    
-    glm::mat4 projection = glm::perspective(glm::radians(camera.zoom), (float)engine::SCREEN_WIDTH / (float)engine::SCREEN_HEIGHT, 0.1f, 100.0f);
-    shader.setMatrix4("projection", projection);
-
-    glm::mat4 view = camera.getViewMatrix();
-
-    shader.setMatrix4("view", view);
-
-    glBindVertexArray(mesh.VAO);
-    for (unsigned int i = 0; i < 10; i++)
+    switch (gameState)
     {
-        glm::mat4 model = glm::mat4(1.0f);
-        model = glm::translate(model, cubePositions[i]);
-        float angle = 20.0f * i;
-        model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
-        shader.setMatrix4("model", model, true);
-        
-        glDrawArrays(GL_TRIANGLES, 0, 36);
+    case engine::enums::GameState::TEST:
+        test.render();
+        break;
     }
-    // glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-    glBindVertexArray(0);
 }
 
 void Aravoxel::update()
@@ -114,6 +88,18 @@ void Aravoxel::update()
     float averageFPS = countedFrames / glfwGetTime();
     std::string title = "aravoxel (" + std::to_string((int)averageFPS) + "FPS)";
     glfwSetWindowTitle(window, title.c_str());
+}
+
+void Aravoxel::changeGameState(engine::enums::GameState state)
+{
+    gameState = state;
+
+    switch (gameState)
+    {
+    case engine::enums::TEST:
+        test.init();
+        break;
+    }
 }
 
 Aravoxel::Aravoxel()
@@ -125,7 +111,7 @@ Aravoxel::Aravoxel()
     else
     {
         std::cout << engine::console::aravoxel() << "is ready for take-off.\n";
-        drawTest();
+        changeGameState(engine::enums::TEST);
         loop();
     }
 }
@@ -133,7 +119,6 @@ Aravoxel::Aravoxel()
 Aravoxel::~Aravoxel()
 {
     std::cout << engine::console::aravoxel() << "is terminating.\n";
-    resourceManager.clear();
     glfwTerminate();
 }
 
@@ -183,5 +168,10 @@ auto Aravoxel::glfwMouse(double xposIn, double yposIn) -> void
     lastX = xpos;
     lastY = ypos;
 
-    camera.mouseInput(xoffset, yoffset);
+    switch (gameState)
+    {
+    case engine::enums::GameState::TEST:
+        test.mouseInput(xoffset, yoffset);
+        break;
+    }
 }

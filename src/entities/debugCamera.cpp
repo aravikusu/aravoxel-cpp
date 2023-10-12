@@ -30,7 +30,6 @@ void DebugCamera::mouseInput(double xoffset, double yoffset, GLboolean constrain
         if (pitch < -89.0f)
             pitch = -89.0f;
     }
-    std::cout << pitch << std::endl;
     updateCameraVectors();
 }
 
