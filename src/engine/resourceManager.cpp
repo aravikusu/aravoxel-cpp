@@ -31,6 +31,8 @@ void ResourceManager::clear()
         glDeleteProgram(iter.second.id);
     for (auto iter : textures)
         glDeleteTextures(1, &iter.second.id);
+    
+    std::cout << engine::console::info() << "ResourceManager has been cleared.\n";
 }
 
 Shader ResourceManager::loadShaderFromFile(const char *vertexFile, const char *fragmentFile)
@@ -63,7 +65,7 @@ Shader ResourceManager::loadShaderFromFile(const char *vertexFile, const char *f
     }
     catch (std::ifstream::failure e)
     {
-        std::cout << engine::console::error() << "ResourceManager::loadShader: Failed to read shader files\n";
+        std::cout << engine::console::error() << "Failed to read shader files\n";
     }
     const char *vertexShaderCode = vertexCode.c_str();
     const char *fragmentShaderCode = fragmentCode.c_str();

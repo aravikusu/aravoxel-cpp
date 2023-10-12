@@ -60,6 +60,15 @@ void Shader::setVector4f(const char *name, float x, float y, float z, float w, b
     glUniform4f(glGetUniformLocation(this->id, name), x, y, z, w);
 }
 
+void Shader::setMatrix4(const char *name, const glm::mat4 &matrix, bool useShader)
+{
+    if (useShader)
+    {
+        this->use();
+    }
+    glUniformMatrix4fv(glGetUniformLocation(this->id, name), 1, GL_FALSE, glm::value_ptr(matrix));
+}
+
 void Shader::checkCompileErrors(GLuint object, std::string type)
 {
     int success;
@@ -70,11 +79,11 @@ void Shader::checkCompileErrors(GLuint object, std::string type)
         if (!success)
         {
             glGetShaderInfoLog(object, 1024, NULL, infoLog);
-            std::cout << engine::console::error() << "Shader::compile: " << type << " compilation failed!\n" << infoLog << "\n";
+            std::cout << engine::console::error() << type << " compilation failed!\n" << infoLog << "\n";
         }
         else
         {
-            std::cout << engine::console::success() << "Shader::compile: Successfully compiled " << type << " shader!\n";
+            std::cout << engine::console::success() << "Successfully compiled " << type << " shader!\n";
         }
     }
     else
@@ -83,11 +92,11 @@ void Shader::checkCompileErrors(GLuint object, std::string type)
         if (!success)
         {
             glGetProgramInfoLog(object, 1024, NULL, infoLog);
-            std::cout << engine::console::error() << "Shader::compile: " << type << " linking failed!\n" << infoLog << "\n";
+            std::cout << engine::console::error() << type << " linking failed!\n" << infoLog << "\n";
         }
         else
         {
-            std::cout << engine::console::success() << "Shader::compile: Successfully linked Shader Program with ID:" << object << "!\n";
+            std::cout << engine::console::success() << "Successfully linked Shader Program with ID:" << object << "!\n";
         }
     }
 }
