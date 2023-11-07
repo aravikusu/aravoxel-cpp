@@ -1,7 +1,7 @@
 # aravoxel
 aravoxel is a voxel engine written in C++ using GLFW and OpenGL.
 
-The idea is that oneday it will be an ActionRPG inspired by Cube World.
+The idea is that one day it will be an action RPG inspired by Cube World.
 It's not there yet.
 Not even close.
 

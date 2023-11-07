@@ -6,9 +6,9 @@ namespace engine
 {
     inline const std::string SHADER_DIR = "src/shaders/";
     inline const std::string TEXTURE_DIR = "src/assets/textures/";
-
-    inline const int SCREEN_WIDTH = 1920;
-    inline const int SCREEN_HEIGHT = 1080;
+    inline const std::string SETTINGS_FILE = "settings.toml";
+    inline const std::string ENGINE_NAME = "aravoxel";
+    inline const std::string ENGINE_VERSION = "0.0.1";
 
     /// @brief Enums specifically used by the engine, such as GameState.
     namespace enums
@@ -16,7 +16,8 @@ namespace engine
         enum GameState
         {
             INIT = 0,
-            TEST = 1
+            TEST = 1,
+            VOXEL_WORLD = 2
         };
     }
 
