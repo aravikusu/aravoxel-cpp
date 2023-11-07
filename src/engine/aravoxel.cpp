@@ -7,7 +7,7 @@ bool Aravoxel::init()
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    window = glfwCreateWindow(engine::SCREEN_WIDTH, engine::SCREEN_HEIGHT, "aravoxel", NULL, NULL);
+    window = glfwCreateWindow(settings.getWidth(), settings.getHeight(), "aravoxel", NULL, NULL);
 
     if (window == NULL)
     {
@@ -65,8 +65,8 @@ void Aravoxel::keyInput()
 {
     switch (gameState)
     {
-    case engine::enums::GameState::TEST:
-        test.keyInput(window, deltaTime);
+    case engine::enums::GameState::VOXEL_WORLD:
+        voxelWorld.keyInput(window, deltaTime);
     }
 }
 
@@ -77,8 +77,8 @@ void Aravoxel::render()
 
     switch (gameState)
     {
-    case engine::enums::GameState::TEST:
-        test.render();
+    case engine::enums::GameState::VOXEL_WORLD:
+        voxelWorld.render();
         break;
     }
 }
@@ -96,8 +96,8 @@ void Aravoxel::changeGameState(engine::enums::GameState state)
 
     switch (gameState)
     {
-    case engine::enums::TEST:
-        test.init();
+    case engine::enums::VOXEL_WORLD:
+        voxelWorld.init(&settings);
         break;
     }
 }
@@ -111,7 +111,7 @@ Aravoxel::Aravoxel()
     else
     {
         std::cout << engine::console::aravoxel() << "is ready for take-off.\n";
-        changeGameState(engine::enums::TEST);
+        changeGameState(engine::enums::VOXEL_WORLD);
         loop();
     }
 }
@@ -170,8 +170,8 @@ auto Aravoxel::glfwMouse(double xposIn, double yposIn) -> void
 
     switch (gameState)
     {
-    case engine::enums::GameState::TEST:
-        test.mouseInput(xoffset, yoffset);
+    case engine::enums::GameState::VOXEL_WORLD:
+        voxelWorld.mouseInput(xoffset, yoffset);
         break;
     }
 }

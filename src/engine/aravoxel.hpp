@@ -13,6 +13,8 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <../entities/debugCamera.hpp>
 #include "../scenes/testScene.hpp"
+#include "../scenes/voxelWorld.hpp"
+#include "./settings.hpp"
 
 class Aravoxel
 {
@@ -42,12 +44,14 @@ private:
     float lastFrame;
 
     bool firstMouse = true;
-    float lastX = engine::SCREEN_WIDTH / 2.0f;
-    float lastY = engine::SCREEN_WIDTH / 2.0f;
+    float lastX = settings.getHeight() / 2.0f;
+    float lastY = settings.getWidth() / 2.0f;
 
     engine::enums::GameState gameState = engine::enums::GameState::INIT;
+    Settings settings;
 
     TestScene test;
+    VoxelWorld voxelWorld;
 
     GLFWwindow *window;
 

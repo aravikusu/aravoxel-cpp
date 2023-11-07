@@ -6,6 +6,7 @@
 #include "../meshes/cubeMesh.hpp"
 #include "../entities/debugCamera.hpp"
 #include <vector>
+#include "../engine/settings.hpp"
 
 /// @brief A test scene used during the learnopengl.com things.
 class TestScene
@@ -13,7 +14,7 @@ class TestScene
 public:
     ~TestScene();
 
-    void init();
+    void init(Settings* settingsRef);
     void update(GLFWwindow* window, float deltaTime);
     void render();
     void keyInput(GLFWwindow* window, float deltaTime);
@@ -21,6 +22,7 @@ public:
 
 private:
     ResourceManager resourceManager;
+    Settings* settings;
 
     DebugCamera camera;
     CubeMesh mesh;
