@@ -1,18 +1,16 @@
 #include "aravoxel.hpp"
 
-bool Aravoxel::init()
-{
+bool Aravoxel::init() {
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    window = glfwCreateWindow(settings.getWidth(), settings.getHeight(), "aravoxel", NULL, NULL);
+    window = glfwCreateWindow(settings.getWidth(), settings.getHeight(), "aravoxel", nullptr, nullptr);
 
-    if (window == NULL)
-    {
+    if (window == nullptr) {
         std::cout << engine::console::error() << "Failed to create GLFW window!"
-                  << "\n";
+                << "\n";
         return false;
     }
 
@@ -28,8 +26,7 @@ bool Aravoxel::init()
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     // Initalize GLAD
-    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-    {
+    if (!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress)) {
         std::cout << engine::console::error() << "GLAD could not be initialized!\n";
         return false;
     }
@@ -42,11 +39,9 @@ bool Aravoxel::init()
     return true;
 }
 
-void Aravoxel::loop()
-{
-    while (!glfwWindowShouldClose(window))
-    {
-        float currentFrame = static_cast<float>(glfwGetTime());
+void Aravoxel::loop() {
+    while (!glfwWindowShouldClose(window)) {
+        const auto currentFrame = static_cast<float>(glfwGetTime());
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
 
@@ -61,117 +56,102 @@ void Aravoxel::loop()
     }
 }
 
-void Aravoxel::keyInput()
-{
-    switch (gameState)
-    {
-    case engine::enums::GameState::VOXEL_WORLD:
-        voxelWorld.keyInput(window, deltaTime);
+void Aravoxel::keyInput() {
+    switch (gameState) {
+        case engine::enums::GameState::VOXEL_WORLD:
+            voxelWorld.keyInput(window, deltaTime);
+            break;
+        default: break;
     }
 }
 
-void Aravoxel::render()
-{
+void Aravoxel::render() {
     glClearColor(0.1f, 0.16f, 0.25f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    switch (gameState)
-    {
-    case engine::enums::GameState::VOXEL_WORLD:
-        voxelWorld.render();
-        break;
+    switch (gameState) {
+        case engine::enums::GameState::VOXEL_WORLD:
+            voxelWorld.render();
+            break;
+        default: break;
     }
 }
 
-void Aravoxel::update()
-{
-    float averageFPS = countedFrames / glfwGetTime();
-    std::string title = "aravoxel (" + std::to_string((int)averageFPS) + "FPS)";
+void Aravoxel::update() const {
+    const int averageFPS = static_cast<int>(countedFrames / glfwGetTime());
+    const std::string title = "aravoxel (" + std::to_string((int) averageFPS) + "FPS)";
     glfwSetWindowTitle(window, title.c_str());
 }
 
-void Aravoxel::changeGameState(engine::enums::GameState state)
-{
+void Aravoxel::changeGameState(const engine::enums::GameState state) {
     gameState = state;
 
-    switch (gameState)
-    {
-    case engine::enums::VOXEL_WORLD:
-        voxelWorld.init(&settings);
-        break;
+    switch (gameState) {
+        case engine::enums::VOXEL_WORLD:
+            voxelWorld.init(&settings);
+            break;
+        default: break;
     }
 }
 
-Aravoxel::Aravoxel()
-{
-    if (!init())
-    {
-        std::cout << "\033[0;31mInitialization failure!\033[0;37m \n\nCheck the console for further errors that lead here.\n";
-    }
-    else
-    {
+Aravoxel::Aravoxel() {
+    if (!init()) {
+        std::cout <<
+                "\033[0;31mInitialization failure!\033[0;37m \n\nCheck the console for further errors that lead here.\n";
+    } else {
         std::cout << engine::console::aravoxel() << "is ready for take-off.\n";
         changeGameState(engine::enums::VOXEL_WORLD);
         loop();
     }
 }
 
-Aravoxel::~Aravoxel()
-{
+Aravoxel::~Aravoxel() {
     std::cout << engine::console::aravoxel() << "is terminating.\n";
     glfwTerminate();
 }
 
 // Window callbacks below
-auto Aravoxel::frameBufferSize(int width, int height) -> void
-{
+auto Aravoxel::frameBufferSize(const int width, const int height) -> void {
     glViewport(0, 0, width, height);
 }
 
-auto Aravoxel::glfwKey(int key, int scancode, int action, int mods) -> void
-{
-    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
-    {
+auto Aravoxel::glfwKey(const int key, int scancode, const int action, [[maybe_unused]] int mods) -> void {
+    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
         glfwSetWindowShouldClose(window, true);
     }
 
-    if (key == GLFW_KEY_TAB && action == GLFW_PRESS)
-    {
+    if (key == GLFW_KEY_TAB && action == GLFW_PRESS) {
         debug = !debug;
 
-        if (debug)
-        {
+        if (debug) {
             glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-        }
-        else
-        {
+        } else {
             glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
         }
     }
 }
 
-auto Aravoxel::glfwMouse(double xposIn, double yposIn) -> void
-{
-    float xpos = static_cast<float>(xposIn);
-    float ypos = static_cast<float>(yposIn);
+auto Aravoxel::glfwMouse(const double xposIn, const double yposIn) -> void {
+    const auto xpos = static_cast<float>(xposIn);
+    const auto ypos = static_cast<float>(yposIn);
 
-    if (firstMouse)
-    {
+    if (firstMouse) {
         lastX = xpos;
         lastY = ypos;
         firstMouse = false;
     }
 
-    float xoffset = xpos - lastX;
-    float yoffset = lastY - ypos;
+    const float xoffset = xpos - lastX;
+    const float yoffset = lastY - ypos;
 
     lastX = xpos;
     lastY = ypos;
 
-    switch (gameState)
-    {
-    case engine::enums::GameState::VOXEL_WORLD:
-        voxelWorld.mouseInput(xoffset, yoffset);
-        break;
+    switch (gameState) {
+        case engine::enums::GameState::VOXEL_WORLD:
+            voxelWorld.mouseInput(xoffset, yoffset);
+            break;
+        default:
+            break;
     }
 }

@@ -3,33 +3,33 @@
 std::map<std::string, Shader> ResourceManager::shaders;
 std::map<std::string, Texture2D> ResourceManager::textures;
 
-Shader ResourceManager::loadShader(const char *vertexFile, const char *fragmentFile, std::string name)
+Shader ResourceManager::loadShader(const char *vertexFile, const char *fragmentFile, const std::string& name)
 {
     shaders[name] = loadShaderFromFile(vertexFile, fragmentFile);
     return shaders[name];
 }
 
-Texture2D ResourceManager::loadTexture(const char *file, bool alpha, std::string name, bool flip)
+Texture2D ResourceManager::loadTexture(const char *file, const bool alpha, const std::string& name, const bool flip)
 {
     textures[name] = loadTextureFromFile(file, alpha, flip);
     return textures[name];
 }
 
-Shader ResourceManager::getShader(std::string name)
+Shader ResourceManager::getShader(const std::string& name)
 {
     return shaders[name];
 }
 
-Texture2D ResourceManager::getTexture(std::string name)
+Texture2D ResourceManager::getTexture(const std::string& name)
 {
     return textures[name];
 }
 
 void ResourceManager::clear()
 {
-    for (auto iter : shaders)
+    for (const auto& iter : shaders)
         glDeleteProgram(iter.second.id);
-    for (auto iter : textures)
+    for (const auto& iter : textures)
         glDeleteTextures(1, &iter.second.id);
     
     std::cout << engine::console::info() << "ResourceManager has been cleared.\n";
@@ -63,9 +63,9 @@ Shader ResourceManager::loadShaderFromFile(const char *vertexFile, const char *f
         vertexCode = vertexStream.str();
         fragmentCode = fragmentStream.str();
     }
-    catch (std::ifstream::failure e)
+    catch ([[maybe_unused]] std::ifstream::failure &e)
     {
-        std::cout << engine::console::error() << "Failed to read shader files\n";
+        std::cout << engine::console::error() << "Failed to read shader files:" << strerror(errno) << "\n";
     }
     const char *vertexShaderCode = vertexCode.c_str();
     const char *fragmentShaderCode = fragmentCode.c_str();
@@ -75,7 +75,7 @@ Shader ResourceManager::loadShaderFromFile(const char *vertexFile, const char *f
     return shader;
 }
 
-Texture2D ResourceManager::loadTextureFromFile(const char * file, bool alpha, bool flip)
+Texture2D ResourceManager::loadTextureFromFile(const char * file, const bool alpha, const bool flip)
 {   
     Texture2D texture;
     if (alpha)
@@ -86,7 +86,7 @@ Texture2D ResourceManager::loadTextureFromFile(const char * file, bool alpha, bo
 
     stbi_set_flip_vertically_on_load(flip);
 
-    std::string filePath = engine::TEXTURE_DIR + file;
+    const std::string filePath = engine::TEXTURE_DIR + file;
     // load image
     int width, height, nrChannels;
     unsigned char* data = stbi_load(filePath.c_str(), &width, &height, &nrChannels, 0);

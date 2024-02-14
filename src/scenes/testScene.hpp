@@ -9,20 +9,23 @@
 #include "../engine/settings.hpp"
 
 /// @brief A test scene used during the learnopengl.com things.
-class TestScene
-{
+class TestScene {
 public:
     ~TestScene();
 
-    void init(Settings* settingsRef);
-    void update(GLFWwindow* window, float deltaTime);
-    void render();
-    void keyInput(GLFWwindow* window, float deltaTime);
+    void init(Settings *settingsRef);
+
+    static void update(GLFWwindow *window, float deltaTime);
+
+    void render() const;
+
+    void keyInput(GLFWwindow *window, float deltaTime);
+
     void mouseInput(double xOffset, double yOffset);
 
 private:
     ResourceManager resourceManager;
-    Settings* settings;
+    Settings *settings{};
 
     DebugCamera camera;
     CubeMesh mesh;
@@ -36,5 +39,6 @@ private:
         glm::vec3(1.3f, -2.0f, -2.5f),
         glm::vec3(1.5f, 2.0f, -2.5f),
         glm::vec3(1.5f, 0.2f, -1.5f),
-        glm::vec3(-1.3f, 1.0f, -1.5f)};
+        glm::vec3(-1.3f, 1.0f, -1.5f)
+    };
 };

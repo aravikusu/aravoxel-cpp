@@ -6,19 +6,22 @@
 #include "engine.hpp"
 #include "../util/toml.hpp"
 
-class Settings
-{
+class Settings {
 public:
     Settings();
+
     ~Settings();
-    
-    int getWidth();
-    int getHeight();
+
+    [[nodiscard]] int getWidth() const;
+
+    [[nodiscard]] int getHeight() const;
 
 private:
     void setDefault();
+
     void setExisting();
-    void save(bool showMessage = true);
+
+    void save(bool showMessage) const;
 
     int windowWidth = 1920;
     int windowHeight = 1080;

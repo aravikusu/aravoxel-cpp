@@ -12,9 +12,9 @@
 class Shader
 {
 public:
-    GLuint id;
+    GLuint id{};
 
-    Shader() {}
+    Shader() = default;
     Shader &use();
 
     /// @brief Compile the shaders and create a shader program.
@@ -27,5 +27,5 @@ public:
     void setMatrix4(const char *name, const glm::mat4 &matrix, bool useShader = false);
 
 private:
-    void checkCompileErrors(GLuint object, std::string type);
+    static void checkCompileErrors(GLuint object, const std::string& type);
 };

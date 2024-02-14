@@ -4,8 +4,7 @@
 #include <vector>
 #include "baseMesh.hpp"
 
-class CubeMesh: public BaseMesh
-{
+class CubeMesh : public BaseMesh {
 public:
     void create();
 };

@@ -13,33 +13,38 @@ enum CAMERA_MOVEMENT {
 };
 
 // Default constants
-const float YAW = -90.0f;
-const float PITCH = 0.0f;
-const float SPEED = 12.5f;
-const float SENSITIVITY = 0.1f;
-const float ZOOM = 45.0f;
+constexpr float YAW = -90.0f;
+constexpr float PITCH = 0.0f;
+constexpr float SPEED = 12.5f;
+constexpr float SENSITIVITY = 0.1f;
+constexpr float ZOOM = 45.0f;
 
-class DebugCamera
-{
+class DebugCamera {
 public:
     float zoom;
+
     // Constructor with vectors.
-    DebugCamera(glm::vec3 position = glm::vec3(0.0f, 0.0f, 3.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f), float yaw = YAW, float pitch = PITCH);
+    explicit DebugCamera(glm::vec3 position = glm::vec3(0.0f, 0.0f, 3.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f),
+                         float yaw = YAW, float pitch = PITCH);
+
     // Constructor with normal values
     DebugCamera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch);
-    glm::mat4 getViewMatrix();
-    void keyboardInput(GLFWwindow* window, float deltaTime);
+
+    [[nodiscard]] glm::mat4 getViewMatrix() const;
+
+    void keyboardInput(GLFWwindow *window, float deltaTime);
+
     void mouseInput(double xoffset, double yoffset, GLboolean constrainPitch = true);
 
 private:
-    glm::vec3 position;
+    glm::vec3 position{};
     glm::vec3 front;
-    glm::vec3 up;
-    glm::vec3 right;
-    glm::vec3 worldUp;
+    glm::vec3 up{};
+    glm::vec3 right{};
+    glm::vec3 worldUp{};
 
-    float yaw;
-    float pitch;
+    double yaw;
+    double pitch;
     float movementSpeed;
     float mouseSensitivity;
 

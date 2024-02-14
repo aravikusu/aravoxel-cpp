@@ -1,13 +1,12 @@
 #include "texture2d.hpp"
 
 Texture2D::Texture2D()
-    : width(0), height(0), internalFormat(GL_RGB), imageFormat(GL_RGB), wrapS(GL_REPEAT), wrapT(GL_REPEAT), filterMin(GL_NEAREST), filterMax(GL_NEAREST)
-{
+    : width(0), height(0), internalFormat(GL_RGB), imageFormat(GL_RGB), wrapS(GL_REPEAT), wrapT(GL_REPEAT),
+      filterMin(GL_NEAREST), filterMax(GL_NEAREST) {
     glGenTextures(1, &this->id);
 }
 
-void Texture2D::generate(GLuint width, GLuint height, unsigned char* data)
-{
+void Texture2D::generate(const GLsizei width, const GLsizei height, const unsigned char *data) {
     this->width = width;
     this->height = height;
 
@@ -24,8 +23,7 @@ void Texture2D::generate(GLuint width, GLuint height, unsigned char* data)
     glGenerateMipmap(GL_TEXTURE_2D);
 }
 
-void Texture2D::bind(GLuint activeTextureSlot) const
-{
+void Texture2D::bind(GLuint activeTextureSlot) const {
     glActiveTexture(activeTextureSlot);
     glBindTexture(GL_TEXTURE_2D, this->id);
 }

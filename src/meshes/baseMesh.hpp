@@ -3,12 +3,12 @@
 #include <glad/glad.h>
 #include <vector>
 
-class BaseMesh
-{
+class BaseMesh {
 public:
-    GLuint VAO;
-    void createVAO(std::vector<GLfloat> vertices, std::vector<GLuint> indices = {});
+    GLuint VAO{};
+
+    void createVAO(const std::vector<GLfloat> &vertices, const std::vector<GLuint> &indices = {});
 
 private:
-    GLuint VBO, EBO;
+    GLuint VBO{}, EBO{};
 };

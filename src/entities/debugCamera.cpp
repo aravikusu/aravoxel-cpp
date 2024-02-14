@@ -1,8 +1,7 @@
 #include "debugCamera.hpp"
 
-void DebugCamera::keyboardInput(GLFWwindow *window, float deltaTime)
-{
-    float velocity = movementSpeed * deltaTime;
+void DebugCamera::keyboardInput(GLFWwindow *window, const float deltaTime) {
+    const float velocity = movementSpeed * deltaTime;
 
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
         position += front * velocity;
@@ -14,16 +13,14 @@ void DebugCamera::keyboardInput(GLFWwindow *window, float deltaTime)
         position += right * velocity;
 }
 
-void DebugCamera::mouseInput(double xoffset, double yoffset, GLboolean constrainPitch)
-{
+void DebugCamera::mouseInput(double xoffset, double yoffset, const GLboolean constrainPitch) {
     xoffset *= mouseSensitivity;
     yoffset *= mouseSensitivity;
 
     yaw += xoffset;
     pitch += yoffset;
 
-    if (constrainPitch)
-    {
+    if (constrainPitch) {
         if (pitch > 89.0f)
             pitch = 89.0f;
 
@@ -33,18 +30,16 @@ void DebugCamera::mouseInput(double xoffset, double yoffset, GLboolean constrain
     updateCameraVectors();
 }
 
-glm::mat4 DebugCamera::getViewMatrix()
-{
+glm::mat4 DebugCamera::getViewMatrix() const {
     return glm::lookAt(position, position + front, up);
 }
 
-void DebugCamera::updateCameraVectors()
-{
+void DebugCamera::updateCameraVectors() {
     // First the front vector
     glm::vec3 newFront;
-    newFront.x = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
-    newFront.y = sin(glm::radians(pitch));
-    newFront.z = -cos(glm::radians(yaw)) * cos(glm::radians(pitch));
+    newFront.x = static_cast<float>(sin(glm::radians(yaw)) * cos(glm::radians(pitch)));
+    newFront.y = static_cast<float>(sin(glm::radians(pitch)));
+    newFront.z = static_cast<float>(-cos(glm::radians(yaw)) * cos(glm::radians(pitch)));
 
     front = glm::normalize(newFront);
 
@@ -54,8 +49,7 @@ void DebugCamera::updateCameraVectors()
 }
 
 DebugCamera::DebugCamera(glm::vec3 position, glm::vec3 up, float yaw, float pitch)
-    : front(glm::vec3(0.0f, 0.0f, -1.0f)), movementSpeed(SPEED), mouseSensitivity(SENSITIVITY), zoom(ZOOM)
-{
+    : zoom(ZOOM), front(glm::vec3(0.0f, 0.0f, -1.0f)), movementSpeed(SPEED), mouseSensitivity(SENSITIVITY) {
     this->position = position;
     worldUp = up;
     this->yaw = yaw;
@@ -64,8 +58,7 @@ DebugCamera::DebugCamera(glm::vec3 position, glm::vec3 up, float yaw, float pitc
 }
 
 DebugCamera::DebugCamera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch)
-    : front(glm::vec3(0.0f, 0.0f, -1.0f)), movementSpeed(SPEED), mouseSensitivity(SENSITIVITY), zoom(ZOOM)
-{
+    : zoom(ZOOM), front(glm::vec3(0.0f, 0.0f, -1.0f)), movementSpeed(SPEED), mouseSensitivity(SENSITIVITY) {
     this->position = glm::vec3(posX, posY, posZ);
     worldUp = glm::vec3(upX, upY, upZ);
     this->yaw = yaw;
