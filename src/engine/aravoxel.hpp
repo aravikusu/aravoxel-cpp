@@ -30,7 +30,7 @@ public:
 
     void update() const;
 
-    void render();
+    void render() const;
 
     void renderDebug();
 

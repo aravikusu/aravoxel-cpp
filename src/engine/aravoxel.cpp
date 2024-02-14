@@ -26,7 +26,7 @@ bool Aravoxel::init() {
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     // Initalize GLAD
-    if (!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress)) {
+    if (!gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress))) {
         std::cout << engine::console::error() << "GLAD could not be initialized!\n";
         return false;
     }
@@ -65,7 +65,7 @@ void Aravoxel::keyInput() {
     }
 }
 
-void Aravoxel::render() {
+void Aravoxel::render() const {
     glClearColor(0.1f, 0.16f, 0.25f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
